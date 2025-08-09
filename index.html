@@ -1,98 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>¿Quieres ser mi esposa?</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#ff3860}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(135deg,#071027 0%, #0f1724 100%);color:#fff}
-    .wrap{min-height:100%;display:grid;place-items:center;padding:32px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(6px);padding:28px;border-radius:14px;max-width:520px;text-align:center;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
-    h1{font-size:28px;margin:0 0 10px}
-    p{margin:0 0 20px;color:#cbd5e1}
-    .btns{display:flex;gap:12px;justify-content:center}
-    button{padding:12px 24px;border-radius:10px;border:0;font-weight:700;cursor:pointer;min-width:110px}
-    .yes{background:linear-gradient(90deg,var(--accent),#ff7aa2);color:white}
-    .no{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#e6eef8}
-    #message{margin-top:18px;font-size:18px;opacity:0;transform:translateY(6px);transition:all .45s ease}
-    /* playful 'no' button escape */
-    .no.move{transform:translateX(140px) translateY(-10px)}
-    /* small confetti pieces */
-    canvas{position:fixed;inset:0;pointer-events:none}
-    footer{margin-top:14px;font-size:13px;color:#94a3b8}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mariana</title>
+    <style>
+        body {
+            font-family: 'Sacramento', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fce7e9; /* Un rosa muy claro */
+            margin: 0;
+        }
+        .mensaje {
+            background-color: white;
+            padding: 30px 60px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 2s;
+        }
+        h1 {
+            color: #e01911; /* Un rojo corazón */
+            margin-bottom: 10px;
+            font-size: 3em;
+        }
+        p {
+            color: #333;
+            font-size: 1.5em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>¿Quieres ser mi esposa?</h1>
-      <p>Escoge una opción — pero cuidado con el botón "No" 😅</p>
-      <div class="btns">
-        <button class="yes" id="btnYes">Sí 💍</button>
-        <button class="no" id="btnNo">No</button>
-      </div>
-      <div id="message"></div>
-      <footer>Hecho con ❤️</footer>
+    <div class="mensaje">
+        <h1>Para la persona más especial</h1>
+        <p>💖 Mariana 💖</p>
+        <p>Siempre te amaré.</p>
     </div>
-  </div>
-  <canvas id="confetti"></canvas>
-  <script>
-    const btnYes = document.getElementById('btnYes');
-    const btnNo = document.getElementById('btnNo');
-    const msg = document.getElementById('message');
-    const canvas = document.getElementById('confetti');
-    const ctx = canvas.getContext('2d');
-    let w = canvas.width = innerWidth;
-    let h = canvas.height = innerHeight;
-
-    // simple confetti engine
-    function rand(n){return Math.random()*n}
-    const pieces = [];
-    function makeConfetti(){
-      for(let i=0;i<120;i++){
-        pieces.push({x:rand(w),y:rand(-h),vx:rand(6)-3,vy:rand(6)+2,rot:rand(360),r:2+rand(6),c:['#ff3860','#ffd166','#60c3ff','#8affc1'][Math.floor(rand(4))]});
-      }
-    }
-    function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
-    addEventListener('resize',resize);
-
-    function render(){
-      ctx.clearRect(0,0,w,h);
-      for(let p of pieces){
-        p.x += p.vx; p.y += p.vy; p.vy += 0.06; p.rot += 5;
-        if(p.y>h+20){p.y = -20; p.x = rand(w); p.vy = rand(4)+1}
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
-        ctx.fillStyle=p.c; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*2);
-        ctx.restore();
-      }
-      requestAnimationFrame(render);
-    }
-
-    makeConfetti();
-
-    // 'No' button avoids the cursor
-    btnNo.addEventListener('mouseenter',()=>{
-      btnNo.classList.toggle('move');
-      setTimeout(()=>btnNo.classList.toggle('move'),300);
-    });
-
-    btnYes.addEventListener('click',()=>{
-      // show message and start confetti
-      msg.style.opacity = 1; msg.style.transform='translateY(0)';
-      msg.textContent = '¡Sí! 💖
-      \nGracias por aceptar. Te quiero.';
-      // start confetti animation (already running)
-      canvas.style.pointerEvents='none';
-    });
-
-    // small accessibility: let 'No' be clickable if double-clicked
-    btnNo.addEventListener('click',()=>{
-      msg.style.opacity = 1; msg.style.transform='translateY(0)';
-      msg.textContent = 'Oh... ¿Estás seguro? Pulsa \"Sí\" si cambias de opinión.';
-    });
-
-    render();
-  </script>
 </body>
 </html>
